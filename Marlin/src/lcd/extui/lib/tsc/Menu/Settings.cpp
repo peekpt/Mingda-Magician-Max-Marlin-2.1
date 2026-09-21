@@ -58,12 +58,34 @@ void loopCheckSettings(void)
 
 // Version infomation
 GUI_RECT lcdFullRect = {0, 0, LCD_WIDTH_PIXEL, LCD_HEIGHT_PIXEL};
+static GUI_RECT reloadFactoryRect = {120, 210, 360, 246};
+
+// Reload factory defaults: M502 loads the defaults, M500 stores them.
+static void reloadFactoryDefaults(void)
+{
+  storeCmd("M502\n");
+  storeCmd("M500\n");
+}
+
 void menuCallBackInfo(void)
 {
-  KEY_VALUES key_num = (KEY_VALUES)KEY_GetValue(1, &lcdFullRect);
-  if (key_num != KEY_IDLE)
+  // Check the factory-reset button first, then the whole screen (tap to exit)
+  GUI_RECT infoRects[2] = { reloadFactoryRect, lcdFullRect };
+  KEY_VALUES key_num = (KEY_VALUES)KEY_GetValue(2, infoRects);
+  switch (key_num)
   {
-   infoMenu.cur--;
+    case KEY_ICON_0: // "RELOAD FACTORY DEFAULTS"
+      setDialogInfo(bottomDoubleBtn, textSelect(LABEL_TIPS), (uint8_t *)"Reload factory defaults?",
+                    (uint8_t *)"Yes", (uint8_t *)"No", reloadFactoryDefaults, NULL);
+      infoMenu.menu[++infoMenu.cur] = menuDialog;
+      break;
+
+    case KEY_ICON_1: // anywhere else
+      infoMenu.cur--;
+      break;
+
+    default:
+      break;
   }
 }
 
@@ -87,6 +109,12 @@ void menuInfo(void)
   GUI_SetColor(ORANGE);
   GUI_DispString(OM_X, centerY + BYTE_HEIGHT * 2, (uint8_t *)orangeMod);
   GUI_SetColor(FK_COLOR); // Restore the default text color
+
+  // "RELOAD FACTORY DEFAULTS" text button
+  GUI_DrawRect(reloadFactoryRect.x0, reloadFactoryRect.y0, reloadFactoryRect.x1, reloadFactoryRect.y1);
+  GUI_DispStringInRect(reloadFactoryRect.x0, reloadFactoryRect.y0, reloadFactoryRect.x1, reloadFactoryRect.y1,
+                       (uint8_t *)"RELOAD FACTORY DEFAULTS");
+
   GUI_DispStringInRect(20, LCD_HEIGHT_PIXEL - (BYTE_HEIGHT*2), LCD_WIDTH_PIXEL-20, LCD_HEIGHT_PIXEL, textSelect(LABEL_TOUCH_TO_EXIT));
 
   TSC_ReDrawIcon = 0;
