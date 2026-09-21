@@ -71,7 +71,7 @@ void menuInfo(void)
 {
   const char* hardware = "Board   : " BOARD_INFO_NAME ROBOT_NAME CHIP_NAME;
   const char* firmware = "Firmware: " SHORT_BUILD_VERSION MATERIALS_NAME " (" __DATE__") ";
-  const char* marlin = "Marlin  : 2.0.7.2";
+  const char* marlin = "Marlin  : " SHORT_BUILD_VERSION;
   const char* orangeMod = "ORANGE MOD";
   
   uint16_t HW_X = (LCD_WIDTH_PIXEL - GUI_StrPixelWidth((uint8_t *)hardware))/2;
@@ -86,6 +86,7 @@ void menuInfo(void)
   GUI_DispString(startX, centerY + BYTE_HEIGHT, (uint8_t *)marlin);
   GUI_SetColor(ORANGE);
   GUI_DispString(OM_X, centerY + BYTE_HEIGHT * 2, (uint8_t *)orangeMod);
+  GUI_SetColor(FK_COLOR); // Restore the default text color
   GUI_DispStringInRect(20, LCD_HEIGHT_PIXEL - (BYTE_HEIGHT*2), LCD_WIDTH_PIXEL-20, LCD_HEIGHT_PIXEL, textSelect(LABEL_TOUCH_TO_EXIT));
 
   TSC_ReDrawIcon = 0;
