@@ -52,6 +52,10 @@
   #include "../../../lcd/e3v2/proui/dwin.h"
 #endif
 
+#if ENABLED(MD_FSMC_LCD)
+  #include "../../../lcd/extui/lib/tsc/Menu/Popup.h" // ABL_STATUS for the TSC leveling popup
+#endif
+
 #if HAS_MULTI_HOTEND
   #include "../../../module/tool_change.h"
 #endif
@@ -955,7 +959,16 @@ G29_TYPE GcodeSuite::G29() {
 
     #endif
 
+    // Let the TSC leveling popup know that probing finished
+    #if ENABLED(MD_FSMC_LCD)
+      ABL_STATUS = ABL_DONE;
+    #endif
+
   } // !isnan(abl.measured_z)
+
+  #if ENABLED(MD_FSMC_LCD)
+    if (isnan(abl.measured_z)) ABL_STATUS = ABL_ERROR; // Probing failed
+  #endif
 
   // Restore state after probing
   if (!faux) restore_feedrate_and_scaling();

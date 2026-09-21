@@ -295,8 +295,7 @@ void menuCallBackPopup_ABL(void)
           storeCmd("M500");   // save ABL info
           storeCmd("G28");    // home
 
-          sprintf_P(context, "%s %s\n%s", GET_TEXT(MSG_BILINEAR_LEVELING), GET_TEXT(MSG_FILAMENT_CHANGE_LOAD), GET_TEXT(MSG_FILAMENT_CHANGE_INIT));
-          popupDrawPage(NULL , textSelect(LABEL_TIPS), (uint8_t *)context, NULL, NULL);
+          popupDrawPage(NULL, textSelect(LABEL_TIPS), (uint8_t *)"Bed Leveling Probing.\nPlease wait", NULL, NULL);
 
           ABL_STATUS = ABL_LEVELING;
         }break;
