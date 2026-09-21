@@ -6,7 +6,7 @@ LABEL_MOVE,
 //icon
 {
   {ICON_Z_DEC, LABEL_Z_DEC},
-  {ICON_Y_INC, LABEL_Y_DEC},
+  {ICON_Y_INC, LABEL_Y_INC},
   {ICON_Z_INC, LABEL_Z_INC},
   {ICON_10_MM,  LABEL_10_MM},
   
@@ -16,7 +16,7 @@ LABEL_MOVE,
 //   {ICON_X_INC, LABEL_X_DEC},
 //  #else
   {ICON_X_DEC, LABEL_X_DEC},
-  {ICON_Y_DEC, LABEL_Y_INC},
+  {ICON_Y_DEC, LABEL_Y_DEC},
   {ICON_X_INC, LABEL_X_INC},
 //  #endif
   {ICON_BACK,  LABEL_BACK},
@@ -160,7 +160,7 @@ void menuCallBackMove()
   switch (key_num)
   {
     case KEY_ICON_6: x_add_mm += item_move_len[item_move_len_i];    break;
-    case KEY_ICON_5: y_add_mm += item_move_len[item_move_len_i];    break;
+    case KEY_ICON_5: y_add_mm -= item_move_len[item_move_len_i];    break;
     case KEY_ICON_2: z_add_mm += item_move_len[item_move_len_i];    break;
     case KEY_ICON_3: 
       item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
@@ -168,7 +168,7 @@ void menuCallBackMove()
       menuDrawItem(&moveItems.items[key_num], key_num);
       break;
     case KEY_ICON_4: x_add_mm -= item_move_len[item_move_len_i];    break;
-    case KEY_ICON_1: y_add_mm -= item_move_len[item_move_len_i];    break;
+    case KEY_ICON_1: y_add_mm += item_move_len[item_move_len_i];    break;
     case KEY_ICON_0: z_add_mm -= item_move_len[item_move_len_i];    break;
     case KEY_ICON_7: infoMenu.cur--; break;  
     default:
