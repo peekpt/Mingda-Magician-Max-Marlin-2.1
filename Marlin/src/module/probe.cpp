@@ -764,14 +764,14 @@ float Probe::run_z_probe(const bool sanity_check/*=true*/) {
     }
   #endif
 
-  #if EXTRA_PROBING > 0
+  #if EXTRA_PROBING > 0 || USE_MIDDLE_VALUE_PROBING > 0
     float probes[TOTAL_PROBING];
   #endif
 
   #if TOTAL_PROBING > 2
     float probes_z_sum = 0;
     for (
-      #if EXTRA_PROBING > 0
+      #if EXTRA_PROBING > 0 || USE_MIDDLE_VALUE_PROBING > 0
         uint8_t p = 0; p < TOTAL_PROBING; p++
       #else
         uint8_t p = TOTAL_PROBING; p--;
@@ -790,7 +790,7 @@ float Probe::run_z_probe(const bool sanity_check/*=true*/) {
 
       const float z = DIFF_TERN(HAS_DELTA_SENSORLESS_PROBING, current_position.z, largest_sensorless_adj);
 
-      #if EXTRA_PROBING > 0
+      #if EXTRA_PROBING > 0 || USE_MIDDLE_VALUE_PROBING > 0
         // Insert Z measurement into probes[]. Keep it sorted ascending.
         for (uint8_t i = 0; i <= p; ++i) {                            // Iterate the saved Zs to insert the new Z
           if (i == p || probes[i] > z) {                              // Last index or new Z is smaller than this Z
@@ -808,7 +808,7 @@ float Probe::run_z_probe(const bool sanity_check/*=true*/) {
       #if TOTAL_PROBING > 2
         // Small Z raise after all but the last probe
         if (p
-          #if EXTRA_PROBING > 0
+          #if EXTRA_PROBING > 0 || USE_MIDDLE_VALUE_PROBING > 0
             < TOTAL_PROBING - 1
           #endif
         ) do_blocking_move_to_z(z + Z_CLEARANCE_MULTI_PROBE, z_probe_fast_mm_s);
@@ -833,6 +833,21 @@ float Probe::run_z_probe(const bool sanity_check/*=true*/) {
       for (uint8_t i = min_avg_idx; i <= max_avg_idx; ++i)
         probes_z_sum += probes[i];
 
+    #endif
+
+    #if USE_MIDDLE_VALUE_PROBING > 0
+      // Take the center value (or average the two middle values) as the median
+      static constexpr int PHALF = (TOTAL_PROBING - 1) / 2;
+      const float middle = probes[PHALF],
+                  median = ((TOTAL_PROBING) & 1) ? middle : (middle + probes[PHALF + 1]) * 0.5f;
+
+      #if defined(REDRESS_PROBING) && defined(PROBING_TOLERABLE_ERROR)
+        // Reject this reading if the probe spread is too large
+        if (ABS(probes[TOTAL_PROBING - 1] - probes[0]) > PROBING_TOLERABLE_ERROR)
+          return NAN;
+      #endif
+
+      return median;
     #endif
 
     const float measured_z = probes_z_sum * RECIPROCAL(MULTIPLE_PROBING);

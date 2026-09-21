@@ -670,6 +670,10 @@ G29_TYPE GcodeSuite::G29() {
 
       bool zig = PR_OUTER_SIZE & 1;  // Always end at RIGHT and BACK_PROBE_BED_POSITION
 
+      #if defined(REDRESS_PROBING) && defined(PROBING_TOLERABLE_ERROR)
+        float last_value = -999; // Previous probe reading, for the tolerance check
+      #endif
+
       // Outer loop is X with PROBE_Y_FIRST enabled
       // Outer loop is Y with PROBE_Y_FIRST disabled
       for (PR_OUTER_VAR = 0; PR_OUTER_VAR < PR_OUTER_SIZE && !isnan(abl.measured_z); PR_OUTER_VAR++) {
@@ -708,10 +712,28 @@ G29_TYPE GcodeSuite::G29() {
 
           abl.measured_z = faux ? 0.001f * random(-100, 101) : probe.probe_at_point(abl.probePos, raise_after, abl.verbose_level);
 
+          // Redress a failed probe: retry a few times before giving up
+          #if defined(REDRESS_PROBING) && (PROBING_REDRESS_NUM > 0)
+            for (uint8_t redress_i = PROBING_REDRESS_NUM; (redress_i--) && isnan(abl.measured_z);)
+              abl.measured_z = faux ? 0.001f * random(-100, 101) : probe.probe_at_point(abl.probePos, raise_after, abl.verbose_level);
+          #endif
+
           if (isnan(abl.measured_z)) {
             set_bed_leveling_enabled(abl.reenable);
             break; // Breaks out of both loops
           }
+
+          // Reject a reading that jumps too far from the previous point
+          #if defined(REDRESS_PROBING) && defined(PROBING_TOLERABLE_ERROR)
+            else {
+              if (last_value > -100 && ABS(last_value - abl.measured_z) > PROBING_TOLERABLE_ERROR) {
+                abl.measured_z = NAN;
+                set_bed_leveling_enabled(abl.reenable);
+                break; // Breaks out of both loops
+              }
+              last_value = abl.measured_z;
+            }
+          #endif
 
           #if ENABLED(AUTO_BED_LEVELING_LINEAR)
 
