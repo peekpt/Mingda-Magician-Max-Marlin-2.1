@@ -45,12 +45,65 @@ version)**, ported from the original working **Marlin 2.0.x** port
   ```bash
   pio run -e langgo407ve_gd
   ```
-- **Output:** `.pio/build/langgo407ve_gd/firmware.bin`
-  (a fresh copy is also placed in `Desktop/fw/firmware.bin`).
-- **Flash:** copy `firmware.bin` to the SD-card root, insert it, and power on.
+- **Output:** `.pio/build/langgo407ve_gd/firmware.bin` — a fresh copy is also
+  placed in `_FIRMWARE/firmware.bin` and `Desktop/fw/firmware.bin`.
 
-Resource usage (clean build): **Flash ≈ 92 %** (421,892 / 458,752 B),
-**RAM ≈ 25.6 %** (33,508 / 131,072 B).
+Resource usage: **Flash ≈ 92 %**, **RAM ≈ 26 %**.
+
+---
+
+## Updating the firmware (SD card)
+
+1. Build the firmware:
+   ```bash
+   pio run -e langgo407ve_gd
+   ```
+2. Copy the freshly built `firmware.bin`
+   (from `.pio/build/langgo407ve_gd/`, or the copy in `_FIRMWARE/`).
+3. Copy `firmware.bin` to the **root of the SD card** (FAT32, ≤ 32 GB).
+4. Insert the SD card into the printer and **power it on**.
+   The bootloader at `0x08000000` flashes the application to `0x08010000`.
+5. Wait for the Marlin boot screen, then remove the SD card.
+
+## Updating the display icons
+
+The 480×320 TFT UI loads its icons from the on-board **W25Q64 SPI flash**. To
+update them:
+
+1. Copy the `_ICONS/TFT35` folder to the **root of the SD card**, so the card
+   contains `TFT35/bmp/*.bmp` (67 icons).
+2. Insert the SD card and **power on**. At boot the firmware flashes the icons
+   from `TFT35/bmp` into the W25Q64.
+3. After the boot screen appears, **remove the `TFT35` folder from the SD card**.
+   (The firmware re-flashes the icons on every boot while the folder is present.)
+
+> An optional `TFT35/font` folder (`byte_a~1.fon`, `word_u~1.fon`) updates the
+> UI fonts the same way.
+
+## First-time setup (after flashing)
+
+1. Power on the printer and let it boot.
+2. Open **Info** in the menu and press **`RELOAD FACTORY DEFAULTS`**
+   (this runs `M502` then `M500`, resetting the EEPROM to the firmware defaults).
+3. **Recycle the power** — turn the printer off and back on.
+4. Run the **bed leveling** procedure (auto-level: `G28` + `G29`, 4×4 grid).
+5. Do the **Babystep / Z-offset** procedure to set the first-layer height.
+
+## Linear Advance
+
+Linear Advance is **enabled by default** with `ADVANCE_K = 0.072`
+(tuned for this direct-drive, titanium-heatbreak setup). The running value is
+stored in EEPROM; the compiled default (`0.072`) is what `M502` restores.
+
+- **Read** the current value: send `M900` (reports `K`).
+- **Change** it: `M900 K<value>` (e.g. `M900 K0.05`), then `M500` to save.
+- **Disable** it: `M900 K0`.
+- It can also be changed live during a print from the G-code console.
+
+The default is defined in `Marlin/Configuration_adv.h`:
+```c
+#define ADVANCE_K 0.072
+```
 
 ---
 
