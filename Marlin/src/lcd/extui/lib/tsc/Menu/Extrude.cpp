@@ -146,7 +146,7 @@ void menuCallBackExtrude(void)
   {
     // case KEY_ICON_0:
     //   if(pause_extrude_flag)  // 暂停状态使用这个函数，因为暂停处于阻塞状态，无法使用Gcode
-    //     ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) - item_len[item_len_i], item_extruder_i, item_speed[item_speed_i]);
+    //     ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) - item_len[item_len_i], item_extruder_i, MMM_TO_MMS(item_speed[item_speed_i]));
     //   else
     //     e_add_mm -= item_len[item_len_i];   // 点击了退料按钮，数值减小
     //   break;
@@ -164,7 +164,7 @@ void menuCallBackExtrude(void)
     
     case KEY_ICON_3:
       stop_home = false;
-      ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) + item_len[item_len_i], item_extruder_i, item_speed[item_speed_i]);
+      ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) + item_len[item_len_i], item_extruder_i, MMM_TO_MMS(item_speed[item_speed_i]));
       break;
     
     case KEY_ICON_4:
@@ -324,7 +324,7 @@ void menuCallBackExtrude2(void)
       GUI_DispString(180, 30, (uint8_t*)str);
      #else
       if(pause_extrude_flag)
-        ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) - item_len[item_len_i], item_extruder_i, item_speed[item_speed_i]);
+        ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) - item_len[item_len_i], item_extruder_i, MMM_TO_MMS(item_speed[item_speed_i]));
       else
         e_add_mm -= item_len[item_len_i];
      #endif
@@ -332,7 +332,7 @@ void menuCallBackExtrude2(void)
     
     case KEY_ICON_3:
       stop_home = false;
-      ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) + item_len[item_len_i], item_extruder_i, item_speed[item_speed_i]);
+      ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(item_extruder_i) + item_len[item_len_i], item_extruder_i, MMM_TO_MMS(item_speed[item_speed_i]));
       break;
     
     case KEY_ICON_4:

@@ -436,7 +436,7 @@ void menuCallBackPopup_Unload(void)
           unload_state = UNLOAD_WAIT_RUN;
           popupDrawPage(NULL , textSelect(LABEL_TIPS), (uint8_t *)GET_TEXT(MSG_FILAMENTLOAD), NULL, NULL);
           planner.synchronize();  // waiting for the last action to complete
-          ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(the_active_e) + 75, the_active_e, EXTRUDE_SLOW_SPEED);
+          ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(the_active_e) + 75, the_active_e, MMM_TO_MMS(EXTRUDE_SLOW_SPEED));
           planner.synchronize();  // waiting for the last action to complete
           unload_state = UNLOAD_END;
           key_lock = false;    // 触摸锁关闭
@@ -449,9 +449,9 @@ void menuCallBackPopup_Unload(void)
           ExtUI::setTargetFan_percent(100, (ExtUI::fan_t)the_active_e);
           popupDrawPage(NULL , textSelect(LABEL_TIPS), (uint8_t *)GET_TEXT(MSG_FILAMENTUNLOAD), NULL, NULL);
           planner.synchronize();  // waiting for the last action to complete
-          ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(the_active_e) + 20, the_active_e, EXTRUDE_NORMAL_SPEED);
+          ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(the_active_e) + 20, the_active_e, MMM_TO_MMS(EXTRUDE_NORMAL_SPEED));
           planner.synchronize();  // waiting for the last action to complete
-          ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(the_active_e) - 70, the_active_e, EXTRUDE_NORMAL_SPEED);
+          ExtUI::setAxisPosition_mm(ExtUI::getAxisPosition_mm(the_active_e) - 70, the_active_e, MMM_TO_MMS(EXTRUDE_NORMAL_SPEED));
           planner.synchronize();  // waiting for the last action to complete
           ExtUI::setTargetFan_percent(0, (ExtUI::fan_t)the_active_e);
           unload_state = UNLOAD_END;
