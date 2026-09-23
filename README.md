@@ -1,3 +1,5 @@
+![Mingda Magician Max — Marlin 2.1 Firmware](images/banner.png)
+
 # Mingda Magician Max (GD32) — Marlin 2.1 Firmware
 
 Custom Marlin **2.1.2.8** firmware for the **Mingda Magician Max (GD32 chip
