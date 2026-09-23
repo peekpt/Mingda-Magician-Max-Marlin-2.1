@@ -201,6 +201,7 @@ void menuPrint(void)
       sprintf(title, "SD:");
     }
     filelist.refresh();
+    can_print_flag = true;  // Re-enable file selection whenever the print list is opened
     for(uint8_t i = 0; i < NUM_PER_PAGE; i++) printItems.items[i].icon = NULL;
     menuDrawListPage(&printItems);
     gocdeListDraw();

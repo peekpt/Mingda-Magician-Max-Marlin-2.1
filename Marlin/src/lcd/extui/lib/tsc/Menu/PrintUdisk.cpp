@@ -348,6 +348,7 @@ void menuPrintUdisk(void)
   if (udisk.usbIsReady())
   {
     filelistUdisk.refresh();
+    can_print_flag = true;  // Re-enable file selection whenever the print list is opened
     for(uint8_t i = 0; i < NUM_PER_PAGE; i++) printItemsUdisk.items[i].icon = NULL;
     menuDrawListPage(&printItemsUdisk);
     gocdeListDrawUdisk();

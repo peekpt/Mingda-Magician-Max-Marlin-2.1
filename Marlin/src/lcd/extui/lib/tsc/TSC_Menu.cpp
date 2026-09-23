@@ -170,6 +170,7 @@ void menuUpdate(void) {
   } else {
     if (hasPrintingMenu) {
       hasPrintingMenu = false;
+      can_print_flag = true;  // Printing ended (done or stopped): allow selecting a file again
       while (infoMenu.menu[infoMenu.cur] != menuPrinting && infoMenu.cur) {
         infoMenu.cur--;
       }
