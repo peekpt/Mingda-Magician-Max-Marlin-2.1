@@ -172,3 +172,5 @@ tags
 .aider*
 !.aiderignore
 .env
+
+compile_commands.json
