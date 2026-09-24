@@ -24,7 +24,8 @@ version)**, ported from the original working **Marlin 2.0.x** port
 | Stepper drivers | TMC2208 (UART, half-duplex), 16 microsteps, interpolated to 256 |
 | Axis steps/mm | X 80, Y 80, Z 800, E 416.6 (calibrated over 100 mm) |
 | Max feedrate | 150 / 150 / 20 / 45 mm/s |
-| Max acceleration | 600 / 600 / 100 / 700 mm/s² |
+| Max acceleration | 500 / 500 / 100 / 500 mm/s² |
+| Print / retract / travel accel | 500 mm/s² |
 | Jerk | X 10, Y 8, Z 10, E 7 mm/s |
 | Hotend | 100K thermistor (`TEMP_SENSOR_0 = 1`), titanium heatbreak (300 °C max) |
 | Bed | 100K thermistor (`TEMP_SENSOR_BED = 1`), PID (`PIDTEMPBED`) |
@@ -32,7 +33,7 @@ version)**, ported from the original working **Marlin 2.0.x** port
 | Display | Proprietary 480×320 FSMC TFT (ST7796/ILI9488-class) + XPT2046 touch |
 | Storage | SD card (software SPI), USB flash drive (USB host), W25Q64 SPI flash (8 MB) |
 | Sensors | Filament runout |
-| Features | USB-disk printing, power-loss recovery, custom touch UI |
+| Features | USB-disk printing, power-loss recovery, custom touch UI with **orange icons** |
 
 ---
 
@@ -93,9 +94,9 @@ update them:
 
 ## Linear Advance
 
-Linear Advance is **enabled by default** with `ADVANCE_K = 0.072`
+Linear Advance is **enabled by default** with `ADVANCE_K = 0.052`
 (tuned for this direct-drive, titanium-heatbreak setup). The running value is
-stored in EEPROM; the compiled default (`0.072`) is what `M502` restores.
+stored in EEPROM; the compiled default (`0.052`) is what `M502` restores.
 
 - **Read** the current value: send `M900` (reports `K`).
 - **Change** it: `M900 K<value>` (e.g. `M900 K0.05`), then `M500` to save.
@@ -104,7 +105,7 @@ stored in EEPROM; the compiled default (`0.072`) is what `M502` restores.
 
 The default is defined in `Marlin/Configuration_adv.h`:
 ```c
-#define ADVANCE_K 0.072
+#define ADVANCE_K 0.052
 ```
 
 ---
@@ -146,6 +147,8 @@ The default is defined in `Marlin/Configuration_adv.h`:
 - Adapted the UI to the 2.1 API (`FileList::firstOpenPrint`, `getFlow_percent`,
   `bedlevel.z_values`, `queue.ring_buffer.length`, `mm_per_step`, media/root
   APIs, `ExtUI` callback signatures, etc.).
+- The interface now uses an **orange icon theme** (custom icon set shipped in
+  `_ICONS/TFT35`; see *Updating the display icons* above).
 - Also carried over the optional DWIN/serial-LCD path (`lcd/mingda_lcd`,
   `lcd_show_addr.*`), disabled by default (`USART_LCD`).
 
