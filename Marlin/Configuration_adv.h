@@ -905,10 +905,10 @@
  * 长时间不动就关闭步进电机
  */
 #define DEFAULT_STEPPER_TIMEOUT_SEC 120
-#define DISABLE_IDLE_X false
-#define DISABLE_IDLE_Y false
-#define DISABLE_IDLE_Z false  // Set 'false' if the nozzle could fall onto your printed part!
-#define DISABLE_IDLE_E false
+#define DISABLE_IDLE_X true
+#define DISABLE_IDLE_Y true
+#define DISABLE_IDLE_Z true  // Set 'false' if the nozzle could fall onto your printed part!
+#define DISABLE_IDLE_E true
 
 // If the Nozzle or Bed falls when the Z stepper is disabled, set its resting position here.
 // 如果Z步进器被禁用时喷嘴或床身下降，将其静止位置设置在此处。
@@ -1958,7 +1958,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-#define MINIMUM_STEPPER_PULSE 2   // longer, cleaner step pulses (TMC2208 false short-trip test)
+//#define MINIMUM_STEPPER_PULSE 2
 
 /**
  * Maximum stepping rate (in Hz) the stepper driver allows    步进驱动器允许的最大步进速率(Hz)
@@ -2516,12 +2516,12 @@
    * M912 - Clear stepper driver overtemperature pre-warn condition flag.
    * M122 - Report driver parameters (Requires TMC_DEBUG)
    */
-  #define MONITOR_DRIVER_STATUS
+  //#define MONITOR_DRIVER_STATUS
 
   #if ENABLED(MONITOR_DRIVER_STATUS)
     #define CURRENT_STEP_DOWN     50  // [mA]
     #define REPORT_CURRENT_CHANGE
-    //#define STOP_ON_ERROR          // (diagnostic) keep printing and report
+    #define STOP_ON_ERROR
   #endif
 
   /**
@@ -2613,7 +2613,7 @@
    * Enable M122 debugging command for TMC stepper drivers.
    * M122 S0/1 will enable continous reporting.
    */
-  #define TMC_DEBUG
+  //#define TMC_DEBUG
 
   /**
    * You can set your own advanced settings by filling in predefined functions.
