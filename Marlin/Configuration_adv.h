@@ -1958,7 +1958,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MINIMUM_STEPPER_PULSE 2
+#define MINIMUM_STEPPER_PULSE 2   // longer, cleaner step pulses (TMC2208 false short-trip test)
 
 /**
  * Maximum stepping rate (in Hz) the stepper driver allows    步进驱动器允许的最大步进速率(Hz)
