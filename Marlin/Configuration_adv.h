@@ -905,10 +905,10 @@
  * 长时间不动就关闭步进电机
  */
 #define DEFAULT_STEPPER_TIMEOUT_SEC 120
-#define DISABLE_IDLE_X true
-#define DISABLE_IDLE_Y true
-#define DISABLE_IDLE_Z true  // Set 'false' if the nozzle could fall onto your printed part!
-#define DISABLE_IDLE_E true
+#define DISABLE_IDLE_X false
+#define DISABLE_IDLE_Y false
+#define DISABLE_IDLE_Z false  // Set 'false' if the nozzle could fall onto your printed part!
+#define DISABLE_IDLE_E false
 
 // If the Nozzle or Bed falls when the Z stepper is disabled, set its resting position here.
 // 如果Z步进器被禁用时喷嘴或床身下降，将其静止位置设置在此处。
