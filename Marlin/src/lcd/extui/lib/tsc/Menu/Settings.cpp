@@ -65,6 +65,7 @@ static void reloadFactoryDefaults(void)
 {
   storeCmd("M502\n");
   storeCmd("M500\n");
+  Buzzer_play(sound_reset);
 }
 
 void menuCallBackInfo(void)

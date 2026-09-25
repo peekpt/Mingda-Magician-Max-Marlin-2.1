@@ -80,6 +80,9 @@ void Buzzer_play(SOUND sound){
       Buzzer_TurnOn(0,60);
       Buzzer_TurnOn(2200,200);
       break;
+    case sound_reset:
+      Buzzer_TurnOn(2200,1000);
+      break;
     case sound_keypress:
     default:
       Buzzer_TurnOn(LCD_FEEDBACK_FREQUENCY_HZ, LCD_FEEDBACK_FREQUENCY_DURATION_MS);

@@ -81,6 +81,7 @@ typedef enum
   sound_cancel,
   sound_notify,
   sound_keypress,
+  sound_reset,
 }SOUND;
 void Buzzer_play(SOUND sound);
 
