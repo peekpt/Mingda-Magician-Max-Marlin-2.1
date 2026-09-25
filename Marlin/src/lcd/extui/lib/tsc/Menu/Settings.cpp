@@ -58,7 +58,7 @@ void loopCheckSettings(void)
 
 // Version infomation
 GUI_RECT lcdFullRect = {0, 0, LCD_WIDTH_PIXEL, LCD_HEIGHT_PIXEL};
-static GUI_RECT reloadFactoryRect = {120, 210, 360, 246};
+static GUI_RECT reloadFactoryRect = {110, 210, 370, 250};
 
 // Reload factory defaults: M502 loads the defaults, M500 stores them.
 static void reloadFactoryDefaults(void)
@@ -92,7 +92,7 @@ void menuCallBackInfo(void)
 void menuInfo(void)
 {
   const char* hardware = "Board   : " BOARD_INFO_NAME ROBOT_NAME CHIP_NAME;
-  const char* firmware = "MMM 2.1 - " __DATE__;
+  const char* firmware = "Firmware: Mingda 2.1 " __DATE__;
   const char* marlin = "Marlin  : " SHORT_BUILD_VERSION;
   const char* orangeMod = "ORANGE MOD";
   
@@ -110,10 +110,12 @@ void menuInfo(void)
   GUI_DispString(OM_X, centerY + BYTE_HEIGHT * 2, (uint8_t *)orangeMod);
   GUI_SetColor(FK_COLOR); // Restore the default text color
 
-  // "RELOAD FACTORY DEFAULTS" text button
+  // "RELOAD FACTORY DEFAULTS" text button (red)
+  GUI_SetColor(RED);
   GUI_DrawRect(reloadFactoryRect.x0, reloadFactoryRect.y0, reloadFactoryRect.x1, reloadFactoryRect.y1);
-  GUI_DispStringInRect(reloadFactoryRect.x0, reloadFactoryRect.y0, reloadFactoryRect.x1, reloadFactoryRect.y1,
+  GUI_DispStringInRect(reloadFactoryRect.x0 + 8, reloadFactoryRect.y0, reloadFactoryRect.x1 - 8, reloadFactoryRect.y1,
                        (uint8_t *)"RELOAD FACTORY DEFAULTS");
+  GUI_SetColor(FK_COLOR);
 
   GUI_DispStringInRect(20, LCD_HEIGHT_PIXEL - (BYTE_HEIGHT*2), LCD_WIDTH_PIXEL-20, LCD_HEIGHT_PIXEL, textSelect(LABEL_TOUCH_TO_EXIT));
 
