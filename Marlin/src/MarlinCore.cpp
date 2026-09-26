@@ -915,6 +915,8 @@ void idle(const bool no_stepper_sleep/*=false*/) {
       #if PIN_EXISTS(X_MIN)
         SERIAL_ECHOPGM(" xmin="); SERIAL_ECHO(READ(X_MIN_PIN));
       #endif
+      SERIAL_ECHOPGM(" xen=");    SERIAL_ECHO(READ(X_ENABLE_PIN));
+      SERIAL_ECHOPGM(" xdir=");   SERIAL_ECHO(READ(X_DIR_PIN));
       SERIAL_ECHOPGM(" accX=");   SERIAL_ECHO(planner.settings.max_acceleration_mm_per_s2[X_AXIS]);
       SERIAL_ECHOPGM(" accP=");   SERIAL_ECHO(planner.settings.acceleration);
       SERIAL_EOL();
