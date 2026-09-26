@@ -897,6 +897,32 @@ void idle(const bool no_stepper_sleep/*=false*/) {
   // Update the LVGL interface
   TERN_(HAS_TFT_LVGL_UI, LV_TASK_HANDLER());
 
+  // ==== TEMP X-AXIS DIAGNOSTIC (remove once the X stop is diagnosed) ====
+  {
+    static millis_t xdbg_next = 0;
+    static int32_t xdbg_last_x = 0, xdbg_last_y = 0, xdbg_last_e = 0;
+    const millis_t xdbg_ms = millis();
+    if (ELAPSED(xdbg_ms, xdbg_next)) {
+      xdbg_next = xdbg_ms + 1000;
+      const int32_t xdbg_x = stepper.position(X_AXIS),
+                    xdbg_y = stepper.position(Y_AXIS),
+                    xdbg_e = stepper.position(E_AXIS);
+      SERIAL_ECHOPGM("XDBG t=");  SERIAL_ECHO(xdbg_ms);
+      SERIAL_ECHOPGM(" xp=");     SERIAL_ECHO(current_position.x);
+      SERIAL_ECHOPGM(" dx=");     SERIAL_ECHO(xdbg_x - xdbg_last_x);
+      SERIAL_ECHOPGM(" dy=");     SERIAL_ECHO(xdbg_y - xdbg_last_y);
+      SERIAL_ECHOPGM(" de=");     SERIAL_ECHO(xdbg_e - xdbg_last_e);
+      #if PIN_EXISTS(X_MIN)
+        SERIAL_ECHOPGM(" xmin="); SERIAL_ECHO(READ(X_MIN_PIN));
+      #endif
+      SERIAL_ECHOPGM(" accX=");   SERIAL_ECHO(planner.settings.max_acceleration_mm_per_s2[X_AXIS]);
+      SERIAL_ECHOPGM(" accP=");   SERIAL_ECHO(planner.settings.acceleration);
+      SERIAL_EOL();
+      xdbg_last_x = xdbg_x; xdbg_last_y = xdbg_y; xdbg_last_e = xdbg_e;
+    }
+  }
+  // ==== END TEMP X-AXIS DIAGNOSTIC ====
+
   IDLE_DONE:
   TERN_(MARLIN_DEV_MODE, idle_depth--);
   return;
