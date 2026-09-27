@@ -602,6 +602,18 @@ bool Probe::probe_down_to_z(const_float_t z, const_feedRate_t fr_mm_s) {
       return true; // Deploy in LOW SPEED MODE on every probe action
   #endif
 
+  #if ENABLED(HALL_PLATE)
+    uint8_t num = 5;
+    do {
+      if (!num) return true;
+      num--;
+      WRITE(CALIB_PIN, LOW);
+      safe_delay(50);
+      WRITE(CALIB_PIN, HIGH);
+      safe_delay(50);
+    } while (READ(Z_MIN_PROBE_PIN) != Z_MIN_PROBE_ENDSTOP_INVERTING);
+  #endif
+
   // Disable stealthChop if used. Enable diag1 pin on driver.
   #if ENABLED(SENSORLESS_PROBING)
     sensorless_t stealth_states { false };
@@ -649,6 +661,10 @@ bool Probe::probe_down_to_z(const_float_t z, const_feedRate_t fr_mm_s) {
   #if ENABLED(BLTOUCH)
     if (probe_triggered && !bltouch.high_speed_mode && bltouch.stow())
       return true; // Stow in LOW SPEED MODE on every trigger
+  #endif
+
+  #if ENABLED(HALL_PLATE)
+    WRITE(CALIB_PIN, LOW);  // Reset the Hall plate calibration
   #endif
 
   // Clear endstop flags
