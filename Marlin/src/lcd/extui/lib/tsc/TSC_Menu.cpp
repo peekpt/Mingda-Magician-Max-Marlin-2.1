@@ -83,6 +83,19 @@ void Buzzer_play(SOUND sound){
     case sound_reset:
       Buzzer_TurnOn(2200,1000);
       break;
+    case sound_print_start:
+      Buzzer_TurnOn(1319,100); Buzzer_TurnOn(0,20);
+      Buzzer_TurnOn(1760,150);
+      break;
+    case sound_print_done:
+      Buzzer_TurnOn(784,130); Buzzer_TurnOn(0,25);
+      Buzzer_TurnOn(784,130); Buzzer_TurnOn(0,25);
+      Buzzer_TurnOn(880,130); Buzzer_TurnOn(0,25);
+      Buzzer_TurnOn(784,130); Buzzer_TurnOn(0,25);
+      Buzzer_TurnOn(659,320); Buzzer_TurnOn(0,120);
+      Buzzer_TurnOn(784,150); Buzzer_TurnOn(0,30);
+      Buzzer_TurnOn(523,380);
+      break;
     case sound_keypress:
     default:
       Buzzer_TurnOn(LCD_FEEDBACK_FREQUENCY_HZ, LCD_FEEDBACK_FREQUENCY_DURATION_MS);
@@ -168,6 +181,7 @@ void menuUpdate(void) {
   if (isPrinting()) {
     if (!hasPrintingMenu) {
       hasPrintingMenu = true;
+      Buzzer_play(sound_print_start);
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
     }
   } else {
@@ -191,7 +205,7 @@ void menuUpdate(void) {
           // infoMenu.cur--;
          #else
           uint8_t finish_show[64] = {0};
-          Buzzer_play(sound_success);
+          Buzzer_play(sound_print_done);
           uint32_t printedTime = print_job_timer.duration();
           uint32_t  hour = printedTime/3600%1000;   // 让小时数最大可以计数到999
           uint8_t   min = printedTime%3600/60,
