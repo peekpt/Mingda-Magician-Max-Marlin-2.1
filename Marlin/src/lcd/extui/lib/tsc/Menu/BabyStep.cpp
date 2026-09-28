@@ -216,6 +216,13 @@ void menuBabyStep()
   initElements(KEY_ICON_5);
   menuDrawPage(&babyStepItems);
   showBabyStepText();
+
+  // On entry, assume the saved Z offset as the babystep base so the nozzle
+  // starts at the previously tuned height (as on the original firmware).
+  const float base = getCurrentOffset();
+  if(!NEAR_ZERO(base) && NEAR_ZERO(getBabyStepZAxisTotalMM()))
+    babystep.add_mm(Z_AXIS, base);
+
   showBabyStep();
   menuSetFrontCallBack(menuCallBackBabyStep);
 }
