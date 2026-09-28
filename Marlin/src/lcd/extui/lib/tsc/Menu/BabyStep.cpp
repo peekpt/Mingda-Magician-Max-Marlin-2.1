@@ -156,17 +156,11 @@ void menuCallBackBabyStep(void)
           if(settings.save())
             popupReminder_B(textSelect(LABEL_SAVE_POPUP),textSelect(LABEL_SYCHRONZIED_VALUE));  // 保存成功，提示并自动退出
         #else
-          {
-            const float bs_mm = getBabyStepZAxisTotalMM();
-            if(!NEAR_ZERO(bs_mm))
-              ExtUI::setZOffset_mm(ExtUI::getZOffset_mm() + bs_mm);
-            babystep.reset_total(Z_AXIS);
-            if(settings.save()){
-              popupReminder_B(textSelect(LABEL_SAVE_POPUP),textSelect(LABEL_EEPROM_SAVE_SUCCESS));  // 保存成功，提示并自动退出
-            }
-            else{
-              popupReminder_SF(textSelect(LABEL_SAVE_POPUP),textSelect(LABEL_EEPROM_SAVE_FAILED), false);
-            }
+          if(settings.save()){
+            popupReminder_B(textSelect(LABEL_SAVE_POPUP),textSelect(LABEL_EEPROM_SAVE_SUCCESS));  // 保存成功，提示并自动退出
+          }
+          else{
+            popupReminder_SF(textSelect(LABEL_SAVE_POPUP),textSelect(LABEL_EEPROM_SAVE_FAILED), false);
           }
         #endif
        #elif ENABLED(AUTO_BED_LEVELING_BILINEAR) && ENABLED(LEVELING_OFFSET)
