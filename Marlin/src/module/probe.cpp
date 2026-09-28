@@ -603,7 +603,7 @@ bool Probe::probe_down_to_z(const_float_t z, const_feedRate_t fr_mm_s) {
   #endif
 
   #if ENABLED(HALL_PLATE)
-    uint8_t num = 5;
+    uint8_t num = 10;
     do {
       if (!num) return true;
       num--;
@@ -612,6 +612,7 @@ bool Probe::probe_down_to_z(const_float_t z, const_feedRate_t fr_mm_s) {
       WRITE(CALIB_PIN, HIGH);
       safe_delay(50);
     } while (READ(Z_MIN_PROBE_PIN) != Z_MIN_PROBE_ENDSTOP_INVERTING);
+    safe_delay(50);
   #endif
 
   // Disable stealthChop if used. Enable diag1 pin on driver.

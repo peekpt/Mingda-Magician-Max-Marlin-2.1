@@ -1032,10 +1032,10 @@
 
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_FEEDRATE_FAST (10*60) //HOMING_FEEDRATE_Z
+#define Z_PROBE_FEEDRATE_FAST (6*60) //HOMING_FEEDRATE_Z  (slower = less false trigger on Hall plate)
 
 // Feedrate (mm/min) for the "accurate" probe of each point
-#define Z_PROBE_FEEDRATE_SLOW (8*60)  //(Z_PROBE_FEEDRATE_FAST / 2)
+#define Z_PROBE_FEEDRATE_SLOW (2*60)  //(Z_PROBE_FEEDRATE_FAST / 2)  (slow fine approach = stable)
 
 /**
  * Multiple Probing
